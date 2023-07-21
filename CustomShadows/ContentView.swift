@@ -30,22 +30,44 @@ extension View {
     }
 }
 
+extension View {
+    func innerShadow<S: Shape>(using shape: S, angle: Angle = .degrees(0), color: Color = .black, width: CGFloat = 6, blur: CGFloat = 6) -> some View {
+        let finalX = CGFloat(cos(angle.radians - .pi/2))
+        let finalY = CGFloat(sin(angle.radians - .pi/2))
+        
+        return self
+            .overlay(
+                shape
+                    .stroke(color, lineWidth: width)
+                    .offset(x: finalX*width * 0.6, y: finalY*width*0.6)
+                    .blur(radius: blur)
+                    .mask(shape)
+            )
+    }
+}
+
 struct ContentView: View {
     var body: some View {
         ZStack {
 //            Circle()
 //                .fill(Color.white)
 //                .glow(color: .blue, radius: 36)
-              
-            Text("Hello World")
-                .font(.system(size: 96, weight: .black, design: .rounded))
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .frame(width: 400, height: 300)
-                .multicolorGlow()
+        //**********************************
+//            Text("Hello World")
+//                .font(.system(size: 96, weight: .black, design: .rounded))
+//                .foregroundColor(.white)
+//                .multilineTextAlignment(.center)
+//                .frame(width: 400, height: 300)
+//                .multicolorGlow()
+        //**********************************
+            
+            Circle()
+                .fill(Color.green)
+                .frame(width: 300, height: 300)
+                .innerShadow(using: Circle())
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black)
+        .background(Color.white)
         .edgesIgnoringSafeArea(.all)
     }
 }
